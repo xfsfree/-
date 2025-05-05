@@ -77,14 +77,14 @@
     </video>
     
     <!-- Müzik çalar (gizli) -->
-    <audio id="hoa-audio" loop style="display:none">
+    <audio id="hoa-audio" autoplay loop style="display:none">
         <source src="song.mp3" type="audio/mpeg">
     </audio>
     
     <!-- İçerik -->
     <div class="content">
         <h1 class="glow">HOŞ GELDİNİZ</h1>
-        <p>Müziği başlatmak için tıklayın</p>
+        <p id="audio-message" style="display: none;">Müziği başlatmak için bir yere tıklayın</p>
     </div>
     
     <!-- Ses kontrol butonu -->
@@ -94,6 +94,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const audio = document.getElementById('hoa-audio');
             const audioControl = document.getElementById('audio-control');
+            const audioMessage = document.getElementById('audio-message');
             let audioStarted = false;
             
             // Ses durumunu kontrol et
@@ -108,15 +109,19 @@
                 audio.play()
                     .then(() => {
                         audioStarted = true;
-                        document.querySelector('.content p').style.display = 'none';
+                        audioMessage.style.display = 'none';
                         updateAudioControl();
                     })
                     .catch(error => {
                         console.log('Ses oynatma hatası:', error);
+                        audioMessage.style.display = 'block'; // Hata olursa mesaj göster
                     });
             }
             
-            // Sayfa tıklamasında müziği başlat
+            // Sayfa yüklendiğinde otomatik oynatmayı dene
+            startAudio();
+            
+            // Kullanıcı tıklamasında müziği başlat
             document.body.addEventListener('click', function() {
                 if (!audioStarted) {
                     startAudio();
@@ -138,7 +143,7 @@
             audio.volume = 0.5;
             updateAudioControl();
             
-            // LocalStorage işlemleri (örnek kodunuzdan)
+            // LocalStorage işlemleri (mevcut kodunuz)
             const lastCount = localStorage.getItem('lastOnlineCount');
             if (lastCount) {
                 document.querySelectorAll('.online-count').forEach(count => {
