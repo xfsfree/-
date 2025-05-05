@@ -1,1 +1,93 @@
-<h1>hello</h1>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şık Tasarım</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+        
+        #video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+        
+        .content {
+            text-align: center;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073;
+            }
+            to {
+                text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Arka plan videosu -->
+    <video autoplay muted loop id="video-bg">
+        <!-- Kendi videonuzu buraya ekleyin -->
+        <source src="background.mp4" type="video/mp4">
+        Tarayıcınız video etiketini desteklemiyor.
+    </video>
+    
+    <!-- Müzik çalar (otomatik başlar, ses kapalı başlar) -->
+    <audio autoplay loop id="audio-player">
+        <source src="song.mp3" type="audio/mpeg">
+        Tarayıcınız audio etiketini desteklemiyor.
+    </audio>
+    
+    <!-- İçerik -->
+    <div class="content">
+        <h1 class="glow">HOŞ GELDİNİZ</h1>
+    </div>
+    
+    <script>
+        // Sayfa yüklendiğinde videoyu ve müziği başlat
+        window.onload = function() {
+            // Videonun sesini kapat (isteğe bağlı)
+            document.getElementById('video-bg').muted = true;
+            
+            // Müziğin sesini aç
+            var audio = document.getElementById('audio-player');
+            audio.volume = 0.5; // Ses seviyesini %50 olarak ayarla
+            
+            // Kullanıcı etkileşimi sonrası müziği tam olarak başlat
+            document.body.addEventListener('click', function() {
+                audio.play();
+            });
+        };
+    </script>
+</body>
+</html>
