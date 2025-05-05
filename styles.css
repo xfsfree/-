@@ -1,0 +1,521 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    color: #fff;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    background: #444;
+}
+
+.background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    filter: brightness(0.9) contrast(1.1);
+}
+
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: -1;
+}
+
+.video-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAABJJREFUeNrtwQEBAAAAgiD/r25IQAEAAX5tThQAAAAASUVORK5CYII=') repeat;
+    opacity: 0.1;
+    animation: noise 0.2s infinite;
+    pointer-events: none;
+}
+
+@keyframes noise {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(1px, 1px); }
+    100% { transform: translate(0, 0); }
+}
+
+.intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: opacity 0.8s ease, backdrop-filter 0.8s ease;
+}
+
+.intro-screen.hidden {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    pointer-events: none;
+}
+
+.click-text {
+    font-family: 'Russo One', sans-serif;
+    font-size: 3rem;
+    font-weight: 400;
+    color: #fff;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(255, 255, 255, 0.6);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.container {
+    width: 90%;
+    max-width: 800px;
+    padding: 2rem 1rem;
+    text-align: center;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+.container.visible {
+    opacity: 1;
+}
+
+.profile {
+    margin-bottom: 2.5rem;
+}
+
+.profile h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.profile p {
+    font-size: 1.2rem;
+    color: #ddd;
+}
+
+.discord-profile-card {
+    background: rgba(44, 35, 102, 0.25);
+    border-radius: 8px;
+    width: 300px;
+    height: 420px;
+    max-width: 340px;
+    max-height: 420px;
+    margin: 2rem auto;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.discord-profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.card-banner {
+    background: rgba(26, 20, 59, 0.35);
+    height: 80px;
+    width: 100%;
+}
+
+.card-content {
+    padding: 1.5rem;
+    position: relative;
+}
+
+.discord-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    position: absolute;
+    top: -40px;
+    left: 1rem;
+    transition: transform 0.3s;
+}
+
+.discord-avatar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    border: 3px solid #1a143b;
+    border-bottom: none;
+    border-radius: 80px 80px 0 0;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+.discord-avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    z-index: 0;
+}
+
+.discord-avatar:hover {
+    transform: scale(1.1);
+}
+
+.status-indicator {
+    width: 20px;
+    height: 20px;
+    background: #3ba55c;
+    border-radius: 50%;
+    border: 3px solid #5865f2;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.user-info {
+    margin-top: 4.5rem;
+    text-align: left;
+}
+
+.display-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.3rem;
+}
+
+.username-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.username {
+    font-size: 0.9rem;
+    color: #b9bbbe;
+    font-weight: 400;
+}
+
+.badges {
+    display: flex;
+    gap: 0.3rem;
+}
+
+.badge {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 1rem 0;
+}
+
+.bio-section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #b9bbbe;
+    margin-bottom: 0.5rem;
+}
+
+.bio-section p {
+    font-size: 0.9rem;
+    color: #dcddde;
+    line-height: 1.4;
+}
+
+.bio-section a {
+    color: #5865f2;
+    text-decoration: none;
+}
+
+.bio-section a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    margin-top: 2.5rem;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+/* Mobile: < 480px */
+@media (max-width: 480px) {
+    .click-text {
+        font-size: 2rem;
+    }
+
+    .container {
+        padding: 1rem 0.5rem;
+    }
+
+    .profile h1 {
+        font-size: 1.8rem;
+    }
+
+    .profile p {
+        font-size: 1rem;
+    }
+
+    .discord-profile-card {
+        max-width: 220px;
+        min-height: 340px;
+    }
+
+    .card-banner {
+        height: 60px;
+    }
+
+    .card-content {
+        padding: 1rem;
+    }
+
+    .discord-avatar {
+        width: 60px;
+        height: 60px;
+        top: -30px;
+        left: 0.75rem;
+    }
+
+    .discord-avatar::before {
+        border: 2px solid #1a143b;
+        border-radius: 60px 60px 0 0;
+    }
+
+    .status-indicator {
+        width: 16px;
+        height: 16px;
+        border-width: 2px;
+        bottom: 0;
+        right: 0;
+    }
+
+    .user-info {
+        margin-top: 3rem;
+    }
+
+    .display-name {
+        font-size: 1.2rem;
+    }
+
+    .username {
+        font-size: 0.8rem;
+    }
+
+    .badge {
+        width: 16px;
+        height: 16px;
+    }
+
+    .bio-section h3 {
+        font-size: 0.9rem;
+    }
+
+    .bio-section p {
+        font-size: 0.8rem;
+    }
+
+    footer {
+        margin-top: 1.5rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Tablet: 480px - 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+    .click-text {
+        font-size: 2.5rem;
+    }
+
+    .container {
+        width: 85%;
+        padding: 1.5rem;
+    }
+
+    .profile h1 {
+        font-size: 2rem;
+    }
+
+    .profile p {
+        font-size: 1.1rem;
+    }
+
+    .discord-profile-card {
+        max-width: 250px;
+        min-height: 400px;
+    }
+
+    .card-banner {
+        height: 70px;
+    }
+
+    .card-content {
+        padding: 1.25rem;
+    }
+
+    .discord-avatar {
+        width: 70px;
+        height: 70px;
+        top: -35px;
+        left: 1rem;
+    }
+
+    .discord-avatar::before {
+        border: 2.5px solid #1a143b;
+        border-radius: 70px 70px 0 0;
+    }
+
+    .status-indicator {
+        width: 18px;
+        height: 18px;
+        border-width: 2.5px;
+        bottom: 0;
+        right: 0;
+    }
+
+    .user-info {
+        margin-top: 3.5rem;
+    }
+
+    .display-name {
+        font-size: 1.4rem;
+    }
+
+    .username {
+        font-size: 0.85rem;
+    }
+
+    .badge {
+        width: 18px;
+        height: 18px;
+    }
+
+    .bio-section h3 {
+        font-size: 0.95rem;
+    }
+
+    .bio-section p {
+        font-size: 0.85rem;
+    }
+
+    footer {
+        margin-top: 2rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Desktop: > 768px */
+@media (min-width: 769px) {
+    .click-text {
+        font-size: 3rem;
+    }
+
+    .container {
+        max-width: 800px;
+        padding: 2rem;
+    }
+
+    .profile h1 {
+        font-size: 2.5rem;
+    }
+
+    .profile p {
+        font-size: 1.2rem;
+    }
+
+    .discord-profile-card {
+        max-width: 340px;
+        min-height: 400px;
+    }
+
+    .card-banner {
+        height: 80px;
+    }
+
+    .card-content {
+        padding: 1.5rem;
+    }
+
+    .discord-avatar {
+        width: 80px;
+        height: 80px;
+        top: -40px;
+        left: 1rem;
+    }
+
+    .discord-avatar::before {
+        border: 3px solid #1a143b;
+        border-radius: 80px 80px 0 0;
+    }
+
+    .status-indicator {
+        width: 20px;
+        height: 20px;
+        border-width: 3px;
+        bottom: 0;
+        right: 0;
+    }
+
+    .user-info {
+        margin-top: 4.5rem;
+    }
+
+    .display-name {
+        font-size: 1.5rem;
+    }
+
+    .username {
+        font-size: 0.9rem;
+    }
+
+    .badge {
+        width: 20px;
+        height: 20px;
+    }
+
+    .bio-section h3 {
+        font-size: 1rem;
+    }
+
+    .bio-section p {
+        font-size: 0.9rem;
+    }
+
+    footer {
+        margin-top: 2.5rem;
+        font-size: 0.9rem;
+    }
+}
