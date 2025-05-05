@@ -14,6 +14,7 @@
             justify-content: center;
             align-items: center;
             background-color: #000;
+            cursor: pointer;
         }
         
         #video-bg {
@@ -52,42 +53,112 @@
                 text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6;
             }
         }
+        
+        #audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
     <!-- Arka plan videosu -->
     <video autoplay muted loop id="video-bg">
-        <!-- Kendi videonuzu buraya ekleyin -->
         <source src="background.mp4" type="video/mp4">
         Tarayıcınız video etiketini desteklemiyor.
     </video>
     
-    <!-- Müzik çalar (otomatik başlar, ses kapalı başlar) -->
-    <audio autoplay loop id="audio-player">
+    <!-- Müzik çalar (gizli) -->
+    <audio id="hoa-audio" loop style="display:none">
         <source src="song.mp3" type="audio/mpeg">
-        Tarayıcınız audio etiketini desteklemiyor.
     </audio>
     
     <!-- İçerik -->
     <div class="content">
         <h1 class="glow">HOŞ GELDİNİZ</h1>
+        <p>Müziği başlatmak için tıklayın</p>
     </div>
     
+    <!-- Ses kontrol butonu -->
+    <button id="audio-control">🔇</button>
+    
     <script>
-        // Sayfa yüklendiğinde videoyu ve müziği başlat
-        window.onload = function() {
-            // Videonun sesini kapat (isteğe bağlı)
-            document.getElementById('video-bg').muted = true;
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('hoa-audio');
+            const audioControl = document.getElementById('audio-control');
+            let audioStarted = false;
             
-            // Müziğin sesini aç
-            var audio = document.getElementById('audio-player');
-            audio.volume = 0.5; // Ses seviyesini %50 olarak ayarla
+            // Ses durumunu kontrol et
+            function updateAudioControl() {
+                audioControl.textContent = audio.paused ? '🔇' : '🔊';
+            }
             
-            // Kullanıcı etkileşimi sonrası müziği tam olarak başlat
+            // Müziği başlat
+            function startAudio() {
+                if (audioStarted) return;
+                
+                audio.play()
+                    .then(() => {
+                        audioStarted = true;
+                        document.querySelector('.content p').style.display = 'none';
+                        updateAudioControl();
+                    })
+                    .catch(error => {
+                        console.log('Ses oynatma hatası:', error);
+                    });
+            }
+            
+            // Sayfa tıklamasında müziği başlat
             document.body.addEventListener('click', function() {
-                audio.play();
+                if (!audioStarted) {
+                    startAudio();
+                }
             });
-        };
+            
+            // Ses kontrol butonu
+            audioControl.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (audio.paused) {
+                    audio.play();
+                } else {
+                    audio.pause();
+                }
+                updateAudioControl();
+            });
+            
+            // Varsayılan ayarlar
+            audio.volume = 0.5;
+            updateAudioControl();
+            
+            // LocalStorage işlemleri (örnek kodunuzdan)
+            const lastCount = localStorage.getItem('lastOnlineCount');
+            if (lastCount) {
+                document.querySelectorAll('.online-count').forEach(count => {
+                    count.textContent = lastCount;
+                    count.classList.add('connected');
+                    count.style.display = 'flex';
+                });
+            }
+            
+            document.querySelectorAll('.online-count').forEach(count => {
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (count.textContent && count.textContent !== '0') {
+                            localStorage.setItem('lastOnlineCount', count.textContent);
+                        }
+                    });
+                });
+                observer.observe(count, { characterData: true, childList: true, subtree: true });
+            });
+        });
     </script>
 </body>
 </html>
