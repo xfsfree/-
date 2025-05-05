@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Şık Tasarım</title>
+    <title>卍卍卍卍</title>
     <style>
         body {
             margin: 0;
@@ -73,7 +73,6 @@
     <!-- Arka plan videosu -->
     <video autoplay muted loop id="video-bg">
         <source src="background.mp4" type="video/mp4">
-        Tarayıcınız video etiketini desteklemiyor.
     </video>
     
     <!-- Müzik çalar (gizli) -->
@@ -84,7 +83,6 @@
     <!-- İçerik -->
     <div class="content">
         <h1 class="glow">HOŞ GELDİNİZ</h1>
-        <p id="audio-message" style="display: none;">Müziği başlatmak için bir yere tıklayın</p>
     </div>
     
     <!-- Ses kontrol butonu -->
@@ -94,8 +92,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const audio = document.getElementById('hoa-audio');
             const audioControl = document.getElementById('audio-control');
-            const audioMessage = document.getElementById('audio-message');
-            let audioStarted = false;
             
             // Ses durumunu kontrol et
             function updateAudioControl() {
@@ -104,29 +100,25 @@
             
             // Müziği başlat
             function startAudio() {
-                if (audioStarted) return;
-                
                 audio.play()
                     .then(() => {
-                        audioStarted = true;
-                        audioMessage.style.display = 'none';
                         updateAudioControl();
                     })
                     .catch(error => {
                         console.log('Ses oynatma hatası:', error);
-                        audioMessage.style.display = 'block'; // Hata olursa mesaj göster
+                        // Tarayıcı engellerse, kullanıcı etkileşimini bekle
+                        document.body.addEventListener('click', function handler() {
+                            audio.play().then(() => {
+                                updateAudioControl();
+                            });
+                            document.body.removeEventListener('click', handler); // Tekrar çalışmasını engelle
+                        }, { once: true });
                     });
             }
             
             // Sayfa yüklendiğinde otomatik oynatmayı dene
+            audio.volume = 0.5;
             startAudio();
-            
-            // Kullanıcı tıklamasında müziği başlat
-            document.body.addEventListener('click', function() {
-                if (!audioStarted) {
-                    startAudio();
-                }
-            });
             
             // Ses kontrol butonu
             audioControl.addEventListener('click', function(e) {
@@ -138,10 +130,6 @@
                 }
                 updateAudioControl();
             });
-            
-            // Varsayılan ayarlar
-            audio.volume = 0.5;
-            updateAudioControl();
             
             // LocalStorage işlemleri (mevcut kodunuz)
             const lastCount = localStorage.getItem('lastOnlineCount');
