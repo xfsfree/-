@@ -1,154 +1,57 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>卍卍卍卍</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #000;
-            cursor: pointer;
-        }
-        
-        #video-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1;
-            opacity: 0.8;
-        }
-        
-        .content {
-            text-align: center;
-            color: white;
-            font-family: 'Arial', sans-serif;
-            text-shadow: 0 0 10px rgba(255,255,255,0.3);
-        }
-        
-        h1 {
-            font-size: 3rem;
-            font-weight: 300;
-            letter-spacing: 5px;
-            margin-bottom: 20px;
-        }
-        
-        .glow {
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073;
-            }
-            to {
-                text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6;
-            }
-        }
-        
-        #audio-control {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            z-index: 100;
-        }
-    </style>
+    <title>AA - 卍卍卍卍</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Russo+One&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Arka plan videosu -->
-    <video autoplay muted loop id="video-bg">
-        <source src="background.mp4" type="video/mp4">
+    <video autoplay muted loop playsinline class="background-video">
+        <source src="resources/background.mp4" type="video/mp4">
+        Your browser does not support video playback.
     </video>
-    
-    <!-- Müzik çalar (gizli) -->
-    <audio id="hoa-audio" autoplay loop style="display:none">
-        <source src="song.mp3" type="audio/mpeg">
-    </audio>
-    
-    <!-- İçerik -->
-    
-    <!-- Ses kontrol butonu -->
-    <button id="audio-control">🔇</button>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const audio = document.getElementById('hoa-audio');
-            const audioControl = document.getElementById('audio-control');
-            
-            // Ses durumunu kontrol et
-            function updateAudioControl() {
-                audioControl.textContent = audio.paused ? '🔇' : '🔊';
-            }
-            
-            // Müziği başlat
-            function startAudio() {
-                audio.play()
-                    .then(() => {
-                        updateAudioControl();
-                    })
-                    .catch(error => {
-                        console.log('Ses oynatma hatası:', error);
-                        // Tarayıcı engellerse, kullanıcı etkileşimini bekle
-                        document.body.addEventListener('click', function handler() {
-                            audio.play().then(() => {
-                                updateAudioControl();
-                            });
-                            document.body.removeEventListener('click', handler); // Tekrar çalışmasını engelle
-                        }, { once: true });
-                    });
-            }
-            
-            // Sayfa yüklendiğinde otomatik oynatmayı dene
-            audio.volume = 0.5;
-            startAudio();
-            
-            // Ses kontrol butonu
-            audioControl.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (audio.paused) {
-                    audio.play();
-                } else {
-                    audio.pause();
-                }
-                updateAudioControl();
-            });
-            
-            // LocalStorage işlemleri (mevcut kodunuz)
-            const lastCount = localStorage.getItem('lastOnlineCount');
-            if (lastCount) {
-                document.querySelectorAll('.online-count').forEach(count => {
-                    count.textContent = lastCount;
-                    count.classList.add('connected');
-                    count.style.display = 'flex';
-                });
-            }
-            
-            document.querySelectorAll('.online-count').forEach(count => {
-                const observer = new MutationObserver((mutations) => {
-                    mutations.forEach((mutation) => {
-                        if (count.textContent && count.textContent !== '0') {
-                            localStorage.setItem('lastOnlineCount', count.textContent);
-                        }
-                    });
-                });
-                observer.observe(count, { characterData: true, childList: true, subtree: true });
-            });
-        });
-    </script>
+    <div class="video-overlay"></div>
+
+    <div class="intro-screen">
+        <h1 class="click-text">Click to Enter</h1>
+    </div>
+
+    <audio id="background-music" src="resources/song.mp3"></audio>
+
+    <div class="container">
+        <div class="profile">
+            <h1>AA.XSTS</h1>
+            <p>卍卍卍卍卍卍卍卍卍卍</p>
+        </div>
+
+        <div class="discord-profile-card">
+            <div class="card-banner"></div>
+            <div class="card-content">
+                <img src="resources/pfp.jpg" alt="Discord Avatar" class="discord-avatar">
+                <div class="user-info">
+                    <h2 class="display-name">AA</h2>
+                    <div class="username-badges">
+                        <span class="username">aa.xsts</span>
+                        <div class="badges">
+                            <img src="resources/hypesquad-badge.png" alt="HypeSquad Badge" class="badge">
+                            <!-- Add more badges here as needed -->
+                        </div>
+                    </div>
+                </div>
+                <hr class="divider">
+                <div class="bio-section">
+                    <h3>About Me</h3>
+                    <p>🌙🌙🌙🌙🌙</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 | AA </p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
